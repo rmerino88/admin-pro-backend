@@ -9,7 +9,6 @@ const cors = require('cors');
 // npm i dotenv
 require('dotenv').config();
 
-
 // Crear el servidor express
 const app = express();
 
@@ -17,22 +16,22 @@ const app = express();
 dbConnection();
 
 // Configurar CORS
-app.use(cors());
+app.use( cors() );
+
+// Lectura y parseo del body
+app.use( express.json() );
 
 // Rutas
-app.get('/', (req, res) => {
-    res.status(200).json({
-        ok: true,
-        msg: 'Hola mundo'
-    });
-});
+app.use( '/api/usuarios', require('./routes/usuarios') );
+app.use( '/api/login', require('./routes/auth') );
 
 // Puerto
-app.listen( process.env.PORT, ()=> {
-    console.log( 'Servidor corriendo en el puerto ' + process.env.PORT );
-} );
+app.listen(process.env.PORT, () => {
+    console.log('Servidor corriendo en el puerto ' + process.env.PORT);
+});
 
 // Para correr la máquina con el nodemon
 // npm run start:dev
 // En visual studio en la parte inferior en npm scipts, se puede hacer doble click
 
+// Un middleware son aplicaciones que se usan para llegar a otras
