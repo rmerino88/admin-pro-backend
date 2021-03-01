@@ -12,19 +12,41 @@ const bcrypt = require('bcryptjs');
 const { generarJWT } = require('../helpers/jwt');
 
 const getUsuarios = async (req, res) => {
+    
     // Usuario que realiza la consulta, obtenido en validarJWT
-    const { role } = await Usuario.findById(req.uid);
-    if(role!=='ADMIN'){
-        res.status(401).json({
-            ok: true,
-            msg: 'No tiene permisos para realizar esta consulta'
-        });
-    }
+    // const { role } = await Usuario.findById(req.uid);
+    // if(role!=='ADMIN'){
+    //     res.status(401).json({
+    //         ok: true,
+    //         msg: 'No tiene permisos para realizar esta consulta'
+    //     });
+    // }
 
-    const usuarios = await Usuario.find({}, ['nombre', 'email']);
+    // Paginacion
+    const from = Number(req.query.from) || 0;
+    // const usuarios = await Usuario
+    // En el segundo parámetro se indican los campos de los registros a mostrar
+    // .find({}, ['nombre', 'email'])
+    // .skip( from )
+    // .limit(5);
+    
+    // Total de registros
+    // const total = await Usuario.count();
+
+    /** 
+     * Con el pormise all podemos realizar la llamada a los métodos anteriores
+     * pero de amnera simultánea, de manera que no deberemos de realziarlas secuencialmente.
+     */
+    const [usuarios, total] =  await Promise.all([
+        Usuario.find({}, ['nombre', 'email', 'role', 'google', 'img']).skip( from ).limit(5),
+        Usuario.countDocuments()
+    ]);
+
+    console.log(total);
     res.status(200).json({
         ok: true,
-        usuarios
+        usuarios,
+        total
     });
 };
 

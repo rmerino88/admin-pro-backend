@@ -1,22 +1,22 @@
 /*
-    Rutas de los usuarios
-    Ruta : /api/usuarios
+    Rutas de los hospitales
+    Ruta : /api/hospitales
 */
 
 const { Router } = require('express');
 const { check } = require('express-validator');
-const { validarJWT } = require('../middlewares/validar-jwt');
 
-const controller = require('./../controllers/usuarios');
-// const { getUsuarios } = require('./../controllers/usuarios');
-const { validarCampos } = require('./../middlewares/validar-campos');
+const { validarJWT } = require('../middlewares/validar-jwt');
+const { validarCampos } = require('../middlewares/validar-campos');
+
+const controller = require('../controllers/hospitales');
 
 const router = Router();
 
 router.get(
     '/',
     [validarJWT],
-    controller.getUsuarios
+    controller.getHospitales
 );
 
 // npm i express-validator, para validaciones de los campos
@@ -25,12 +25,11 @@ router.get(
 router.post(
     '/',
     [
-        check('nombre').not().isEmpty(),
-        check('passwd').not().isEmpty(),
-        check('email').isEmail(),
+        validarJWT,
+        check('nombre', 'El nombre del hospital es necesario.').not().isEmpty(),
         validarCampos,
     ],
-    controller.addUsuario
+    controller.addHospital
 );
 
 router.put(
@@ -38,17 +37,15 @@ router.put(
     [
         validarJWT,
         check('nombre').not().isEmpty(),
-        check('email').isEmail(),
-        check('role').not().isEmpty(),
         validarCampos,
     ],
-    controller.modifyUsuario
+    controller.modifyHospital
 );
 
 router.delete(
     '/:id',
     [validarJWT],
-    controller.deleteUsuario
+    controller.deleteHospital
 );
 
 module.exports = router;

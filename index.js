@@ -5,6 +5,9 @@ const { dbConnection } = require('./database/config');
 // npm i cors
 const cors = require('cors');
 
+// Importación necesaria para la subida de ficheros
+const expressFileUpload = require('express-fileupload');
+
 // Para manejar variables de entorno
 // npm i dotenv
 require('dotenv').config();
@@ -21,9 +24,16 @@ app.use( cors() );
 // Lectura y parseo del body
 app.use( express.json() );
 
+// Subida de ficheros
+app.use(expressFileUpload());
+
 // Rutas
 app.use( '/api/usuarios', require('./routes/usuarios') );
+app.use( '/api/hospitales', require('./routes/hospitales') );
+app.use( '/api/medicos', require('./routes/medicos') );
 app.use( '/api/login', require('./routes/auth') );
+app.use( '/api/todo', require('./routes/busquedas') );
+app.use( '/api/upload', require('./routes/uploads') );
 
 // Puerto
 app.listen(process.env.PORT, () => {
@@ -35,3 +45,8 @@ app.listen(process.env.PORT, () => {
 // En visual studio en la parte inferior en npm scipts, se puede hacer doble click
 
 // Un middleware son aplicaciones que se usan para llegar a otras
+
+
+// var serveIndex = require('serve-index');
+// app.use(express.static(__dirname + '/'))
+// app.use('/uploads', serveIndex(__dirname + '/uploads'));
