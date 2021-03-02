@@ -20,7 +20,15 @@ router.post(
     ],
     controller.login);
 
+router.post(
+    '/google',
+    [
+        check('token', 'El token es obligatorio.').not().isEmpty(),
+        validarCampos
+    ],
+    controller.googleSignin);
+
 
 // Si realizamos el export de esta manera, no compila
 // module.exports =  { router };
-module.exports = router ;
+module.exports = router;

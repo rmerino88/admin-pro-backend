@@ -15,9 +15,6 @@ require('dotenv').config();
 // Crear el servidor express
 const app = express();
 
-// Base de datos
-dbConnection();
-
 // Configurar CORS
 app.use( cors() );
 
@@ -26,6 +23,12 @@ app.use( express.json() );
 
 // Subida de ficheros
 app.use(expressFileUpload());
+
+// Base de datos
+dbConnection();
+
+// Direcciones publicas
+app.use( express.static('public') );
 
 // Rutas
 app.use( '/api/usuarios', require('./routes/usuarios') );

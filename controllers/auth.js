@@ -1,8 +1,57 @@
 const { response } = require('express');
 const Usuario = require('../models/usuario');
 const { generarJWT } = require('../helpers/jwt');
+const { googleVerify } = require('../helpers/google-verify');
 
 const bcrypt = require('bcryptjs');
+
+const googleSignin = async (req, res = response) => {
+    try {
+        const { token } = req.body;
+        const { name, email, picture } = await googleVerify(token);
+        // Verficiar si existe un usuario con es email
+        const usuarioDB = await Usuario.findOne({ email });
+        let usuario;
+        // Si no existe el usuario
+        if (!usuarioDB) {
+            usuario = new Usuario({
+                nombre: name,
+                email,
+                passwd: '',
+                img: picture,
+                google: true
+            });
+        } else {
+            usuario = usuarioDB;
+            usuario.google = true;
+            usuario.passwd = '';
+        }
+        // Guardar en BD
+        await usuario.save();
+
+        // Generar el token
+        // const token = await generarJWT(usuarioDB._id)
+        const jsonWebToken = await generarJWT(usuario.id)
+            .then((token) => { return token })
+            .catch((error) => {
+                return res.status(500).json({
+                    ok: false,
+                    msg: error
+                });
+            });
+        return res.status(200).json({
+            ok: true,
+            msg: 'Todo ok.',
+            jsonWebToken
+        });
+    } catch (error) {
+        return res.status(401).json({
+            ok: false,
+            msg: 'Token incorrecto.',
+            token
+        });
+    }
+};
 
 const login = async (req, res = response) => {
 
@@ -52,7 +101,8 @@ const login = async (req, res = response) => {
 };
 
 module.exports = {
-    login
+    login,
+    googleSignin
 }
 // Si realizamos el export de esta manera, no compila
 // module.exports = login;
