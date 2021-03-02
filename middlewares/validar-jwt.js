@@ -9,7 +9,7 @@ const jwt = require('jsonwebtoken');
  * @param {*} next Será llamado en caso de que el middleware pasa,
  * continua el proceso si todo va ok
  */
-const validarJWT = (req, res = response, next) => {
+const validarJWT = async (req, res = response, next) => {
     // Leer el token
     const token = req.header('x-token');
 
@@ -20,14 +20,13 @@ const validarJWT = (req, res = response, next) => {
         });
     }
     try {
-        
+
         // const result = jwt.verify(token, process.env.JWT_SECRET_KEY);
         // console.log(result);
         // El resultado de la llamada verufyes como la siguiente
         // { uid: '60376234f9e4ac204cb6c4a4', iat: 1614246840, exp: 1614290040 }
 
-        const { uid } = jwt.verify(token, process.env.JWT_SECRET_KEY);
-        console.log(uid);
+        const { uid } = await jwt.verify(token, process.env.JWT_SECRET_KEY);
         // Si el token no es válido salta un error que recoge el catch
         // if(!uid){
         //     return res.status(401).json({
@@ -43,7 +42,16 @@ const validarJWT = (req, res = response, next) => {
          */
 
         req.uid = uid;
-        next();
+        if (uid) {
+            console.log('validarJWT', uid);
+            next();
+        } else {
+            return res.status(401).json({
+                ok: false,
+                msg: 'uid no encontrado para el token enviado.',
+                token
+            });
+        }
     } catch (error) {
         return res.status(401).json({
             ok: false,

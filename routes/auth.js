@@ -6,6 +6,7 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
 const { validarCampos } = require('../middlewares/validar-campos');
+const { validarJWT } = require('../middlewares/validar-jwt');
 
 const controller = require('./../controllers/auth');
 
@@ -27,6 +28,11 @@ router.post(
         validarCampos
     ],
     controller.googleSignin);
+
+router.get(
+    '/renew',
+    validarJWT,
+    controller.renewToken);
 
 
 // Si realizamos el export de esta manera, no compila

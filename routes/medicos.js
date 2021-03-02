@@ -33,13 +33,13 @@ router.post(
 
 router.put(
     '/:id',
-    [],
+    [validarJWT],
     controller.modifyMedico
 );
 
 router.delete(
     '/:id',
-    [],
+    [validarJWT],
     controller.deleteMedico
 );
 

@@ -20,7 +20,6 @@ const getHospitales = async (req, res) => {
 
 const addHospital = async (req, res = response) => {
     try {
-        
         // const uid = uid;
         // const hospital = new Hospital(req.body);
         // hospital.usuario = uid; 
@@ -28,7 +27,6 @@ const addHospital = async (req, res = response) => {
             usuario: req.uid,
             ...req.body
         });
-
         const hospitalDB = await hospital.save();
         
         res.status(200).json({
@@ -45,22 +43,80 @@ const addHospital = async (req, res = response) => {
 
 const modifyHospital = async (req, res = response) => {
     
-    res.status(200).json({
-        ok: true,
-        msg: 'modifyHospital: Todo ok'
-    });
+    const idHospital = req.params.id;
+    const uidUsuario = req.uid;
+
+    const nombre = req.body.nombre;
+    try {
+        // Buscamos un hospital en BD con ese id
+        const hospitalDB = await Hospital.findById(idHospital);
+
+        if (!hospitalDB) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'Hospital no registrado en BD con ese id.'
+            });
+        }
+        // Actualizaciones
+        if (hospitalDB.nombre !== nombre) {
+            // Buscamos en BD registros con ese nombre
+            const existeNombre = await Hospital.findOne({ nombre });
+            console.log(`existeNombre ${existeNombre}`);
+            if (existeNombre) {
+                return res.status(500).json({
+                    ok: false,
+                    msg: 'Nombre de hospital ya registrado.'
+                });
+            }
+            const hospitalActualizado = await Hospital.findByIdAndUpdate(idHospital, { nombre, usuario:uidUsuario }, { new: true });
+            // hospitalDB.nombre = nombre;
+            // hospitalDB.save();
+            return res.status(200).json({
+                ok: true,
+                hospitalActualizado
+            });
+        } else {
+            return res.status(500).json({
+                ok: false,
+                msg: 'No se ha realizado la modificación, mismo nombre.'
+            });
+        }
+
+    } catch (err) {
+        return res.status(500).json({
+            ok: false,
+            msg: err.message
+        });
+    }
 };
 
 /**
- * Normalemnete más que borrar un registro
- * se recomienda indidcar ele stado con un boolean
+ * Normalmente más que borrar un registro
+ * se recomienda indicar el estado con un boolean
  */
 const deleteHospital = async (req, res = response) => {
-    
-    res.status(200).json({
-        ok: true,
-        msg: 'deleteHospital: Todo ok'
-    });
+    const uidHospital = req.params.id;
+    try {
+        // Buscamos un usario en BD con ese id
+        const hospitalDB = await Hospital.findById(uidHospital);
+        if(!hospitalDB) {
+            return res.status(404).json({
+                ok: false,
+                msg: "No existe el hospital con ese id."
+            });
+            
+        }
+        await Hospital.findByIdAndDelete(uidHospital);
+        return res.status(200).json({
+            ok: true,
+            uid: uidHospital
+        });
+    } catch (err) {
+        return res.status(500).json({
+            ok: false,
+            err
+        });
+    }
 };
 
 module.exports = {

@@ -10,8 +10,8 @@ const googleVerify = async( token ) => {
         //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
     });
     const payload = ticket.getPayload();
-    const userid = payload['sub'];
-    console.log(payload);
+    // const userid = payload['sub'];
+    // console.log(payload);
     const { name, email, picture } = payload;
     // If request specified a G Suite domain:
     // const domain = payload['hd'];

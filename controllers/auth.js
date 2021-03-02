@@ -99,10 +99,47 @@ const login = async (req, res = response) => {
         });
     }
 };
+/**
+ * No estoy seguro de que este método este funcionando correctamente
+ * El token devuelto es visiblemente más corto
+ * @param {*} req 
+ * @param {*} res 
+ */
+const renewToken = async (req, res = response) => {
+    // No necesitamos enviar el uid porque lo obetenemos en validarJWT
+    const uid = req.uid;
+    
+    try {
+        // Generar el token
+        // const token = await generarJWT(usuarioDB._id)
+        const token = await generarJWT(uid)
+            .then((token) => { return token })
+            .catch((error) => {
+                return res.status(500).json({
+                    ok: false,
+                    msg: error
+                });
+            });
+
+        return res.status(200).json({
+            ok: true,
+            msg: 'Todo ok.',
+            oldToken: req.header('x-token'),
+            newToken: token,
+            uidUsuario: uid
+        });
+    } catch (error) {
+        return res.status(500).json({
+            ok: false,
+            msg: error.message
+        });
+    }
+};
 
 module.exports = {
     login,
-    googleSignin
+    googleSignin,
+    renewToken
 }
 // Si realizamos el export de esta manera, no compila
 // module.exports = login;
