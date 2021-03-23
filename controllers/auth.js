@@ -99,6 +99,7 @@ const login = async (req, res = response) => {
         });
     }
 };
+
 /**
  * No estoy seguro de que este método este funcionando correctamente
  * El token devuelto es visiblemente más corto
@@ -109,6 +110,14 @@ const renewToken = async (req, res = response) => {
     // No necesitamos enviar el uid porque lo obetenemos en validarJWT
     const uid = req.uid;
     
+    const usuario = await Usuario.findById(uid);
+    if(!usuario){
+        return res.status(500).json({
+            ok: false,
+            msg: 'No existe un usuario en BBDD asociado al uid.'
+        });
+    }
+
     try {
         // Generar el token
         // const token = await generarJWT(usuarioDB._id)
@@ -124,9 +133,11 @@ const renewToken = async (req, res = response) => {
         return res.status(200).json({
             ok: true,
             msg: 'Todo ok.',
-            oldToken: req.header('x-token'),
-            newToken: token,
-            uidUsuario: uid
+            // oldToken: req.header('x-token'),
+            // newToken: token,
+            token,
+            // uidUsuario: uid,
+            usuario
         });
     } catch (error) {
         return res.status(500).json({

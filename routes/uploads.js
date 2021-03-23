@@ -21,7 +21,7 @@ router.put(
 
 router.get(
     '/:tipo/:img',
-    [validarJWT],
+    // [validarJWT],
     controller.getImage
 );
 

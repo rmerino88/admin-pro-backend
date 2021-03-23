@@ -24,6 +24,7 @@ const getUsuarios = async (req, res) => {
 
     // Paginacion
     const from = Number(req.query.from) || 0;
+    const limit = Number(req.query.limit) || 5;
     // const usuarios = await Usuario
     // En el segundo parámetro se indican los campos de los registros a mostrar
     // .find({}, ['nombre', 'email'])
@@ -38,14 +39,14 @@ const getUsuarios = async (req, res) => {
      * pero de amnera simultánea, de manera que no deberemos de realziarlas secuencialmente.
      */
     const [usuarios, total] =  await Promise.all([
-        Usuario.find({}, ['nombre', 'email', 'role', 'google', 'img']).skip( from ).limit(5),
+        Usuario.find({}, ['nombre', 'email', 'role', 'google', 'img']).skip( from ).limit(limit),
         Usuario.countDocuments()
     ]);
 
     console.log(total);
     res.status(200).json({
         ok: true,
-        usuarios,
+        resultado: usuarios,
         total
     });
 };
@@ -84,7 +85,8 @@ const addUsuario = async (req, res = response) => {
 
         return res.status(200).json({
             ok: true,
-            usuario
+            usuario,
+            token
         });
 
     } catch (err) {
@@ -122,8 +124,16 @@ const modifyUsuario = async (req, res = response) => {
                     msg: 'Email ya registrado.'
                 });
             }
-            campos.email = email;
-        }
+            // El email no es modificable si es usuario de google
+            if(!usuarioDB.google){
+                campos.email = email;
+            } else if(usuarioDB.email != email){
+                return res.status(400).json({
+                    ok: false,
+                    msg: 'Los usuarios de google no pueden cambiar su correo.'
+                });
+            }
+        } 
 
         console.log(uid);
         console.log(campos);
@@ -131,9 +141,13 @@ const modifyUsuario = async (req, res = response) => {
         // No sirve para nada, es necesario new: true en las options para obtener el ya actualizado
         const usuarioActualizado = await Usuario.findByIdAndUpdate(uid, campos, { new: true });
 
-        return res.status(200).json({
-            ok: true,
-            usuarioActualizado
+        // return res.status(200).json({
+        //     ok: true,
+        //     usuarioActualizado
+        // });
+        return res.status(400).json({
+            ok: false,
+            msg: 'Los usuarios de google no pueden cambiar su correo.'
         });
     } catch (err) {
         return res.status(500).json({

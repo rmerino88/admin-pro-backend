@@ -33,7 +33,9 @@ const MedicoSchema = Schema({
  */
 // cambiar _id a uid, eliminar __v, passswd
 MedicoSchema.method('toJSON', function() {
-    const { __v, ...object} = this.toObject();
+    // const { __v, ...object} = this.toObject();
+    const { __v, _id, ...object} = this.toObject();
+    object.mid = _id;
     return object;
 });
 

@@ -37,21 +37,35 @@ const getDocumentosColeccion = async (req, res = response) => {
     const term = req.params.term;
 
     const regex = new RegExp(term, 'i');
-    
+
+    console.log('Entra');
     try {
         let data = [];
+        let total = number = 0;
         switch (tabla) {
             case 'usuarios':
-                data = await Usuario.find({ nombre: regex });
-                break;
+                // Paginacion
+                const from = Number(req.query.from) || 0;
+                const limit = Number(req.query.limit) || 5;
+                // data = await Usuario.find({ nombre: regex }).skip( from ).limit(5);
+                [data, total] = await Promise.all([
+                    Usuario.find({ nombre: regex }).skip(from).limit(limit),
+                    Usuario.find({ nombre: regex }).count()
+                ]);
+                return res.status(200).json({
+                    ok: true,
+                    msg: 'Todo ok.',
+                    total,
+                    resultado: data
+                });
+            // break;
             case 'hospitales':
-                data = await Hospital.find({ nombre: regex })
-                .populate('usuario','nombre email img');;
-                break;
+                data = await Hospital.find({ nombre: regex });
+            break;
             case 'medicos':
                 data = await Medico.find({ nombre: regex })
-                .populate({ path: 'usuario', select: 'nombre email img' })
-                .populate({ path: 'hospital', select: 'nombre' });
+                    .populate({ path: 'usuario', select: 'nombre email img' })
+                    .populate({ path: 'hospital', select: 'nombre' });
                 break;
             default:
                 return res.status(400).json({

@@ -20,7 +20,7 @@ router.get(
 );
 
 router.get(
-    '/busquedaPorColleccion/:tabla/:term',
+    '/busquedaPorColeccion/:tabla/:term',
     [validarJWT],
     controller.getDocumentosColeccion
 );

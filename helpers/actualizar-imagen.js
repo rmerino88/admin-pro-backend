@@ -29,7 +29,7 @@ const actualizarImagen = async (tipo, uid, nombreArchivo) => {
             await usuarioDB.save();
             return true;
         case 'hospitales':
-            const hospitalDB = await Usuario.findById(uid);
+            const hospitalDB = await Hospital.findById(uid);
             if (!hospitalDB) {
                 return false;
             }

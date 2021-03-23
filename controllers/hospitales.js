@@ -35,7 +35,7 @@ const addHospital = async (req, res = response) => {
         });
     } catch (error) {
         res.status(500).json({
-            ok: true,
+            ok: false,
             msg: error.message
         });
     }
@@ -68,12 +68,12 @@ const modifyHospital = async (req, res = response) => {
                     msg: 'Nombre de hospital ya registrado.'
                 });
             }
-            const hospitalActualizado = await Hospital.findByIdAndUpdate(idHospital, { nombre, usuario:uidUsuario }, { new: true });
+            const hospital = await Hospital.findByIdAndUpdate(idHospital, { nombre, usuario:uidUsuario }, { new: true });
             // hospitalDB.nombre = nombre;
             // hospitalDB.save();
             return res.status(200).json({
                 ok: true,
-                hospitalActualizado
+                hospital
             });
         } else {
             return res.status(500).json({

@@ -9,6 +9,25 @@ const Hospital = require('../models/hospital')
 // Para obetener las ayudas del visual studio sobre los objetos res y req
 const { response } = require('express');
 
+const getMedico = async (req, res) => {
+    
+    const uidMedico = req.params.id;
+    // Si queremos obtener info de distintos elementos de db asociados..
+    const medicoDB = await Medico.findById(uidMedico)
+        .populate({ path: 'usuario', select: 'nombre email img' })
+        .populate({ path: 'hospital', select: 'nombre img' });
+    if (!medicoDB) {
+        return res.status(404).json({
+            ok: false,
+            msg: 'Médico no registrado en BD con ese id.'
+        });
+    }
+    res.status(200).json({
+        ok: true,
+        medico: medicoDB
+    });
+};
+
 const getMedicos = async (req, res) => {
 
     // Si queremos obtener info de distintos elementos de db asociados..
@@ -94,15 +113,15 @@ const deleteMedico = async (req, res = response) => {
     const uidMedico = req.params.id;
     try {
         // Buscamos un usario en BD con ese id
-        const hospitalDB = await Medico.findById(uidMedico);
-        if(!hospitalDB) {
+        const medicoDB = await Medico.findById(uidMedico);
+        if (!medicoDB) {
             return res.status(404).json({
                 ok: false,
                 msg: "No existe el medico con ese id."
             });
-            
+
         }
-        await Hospital.findByIdAndDelete(uidMedico);
+        const resultado = await Medico.findByIdAndDelete(uidMedico);
         return res.status(200).json({
             ok: true,
             uid: uidMedico
@@ -116,6 +135,7 @@ const deleteMedico = async (req, res = response) => {
 };
 
 module.exports = {
+    getMedico,
     getMedicos,
     addMedico,
     modifyMedico,

@@ -13,7 +13,7 @@ const getImage = async (req, res = response) => {
     let pathImage = path.join( __dirname, `../uploads/${tipo}/${img}`);
     // console.log('__dirname', __dirname);
     if ( !fs.existsSync(pathImage) ) {
-        pathImage = path.join( __dirname, `../uploads/Image-Not-Available.png`);
+        pathImage = path.join( __dirname, `../uploads/Image-Not-Available.jpg`);
     }
     res.sendFile(pathImage);
 };
@@ -79,7 +79,8 @@ const fileUpload = async (req, res = response) => {
         if (updatedElement) {
             return res.status(200).json({
                 ok: true,
-                msg: 'Imagen subida y registro actualizado.'
+                msg: 'Imagen subida y registro actualizado.',
+                name: nombreArchivo
             });
         }
     } catch (error) {

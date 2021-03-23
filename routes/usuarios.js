@@ -32,7 +32,7 @@ router.post(
     ],
     controller.addUsuario
 );
-
+ 
 router.put(
     '/:id',
     [
