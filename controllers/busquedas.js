@@ -38,7 +38,6 @@ const getDocumentosColeccion = async (req, res = response) => {
 
     const regex = new RegExp(term, 'i');
 
-    console.log('Entra');
     try {
         let data = [];
         let total = number = 0;

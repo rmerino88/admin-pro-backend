@@ -1,5 +1,6 @@
 const { response } = require('express');
-const { validationResult } = require('express-validator');
+// const { validationResult } = require('express-validator');
+
 const jwt = require('jsonwebtoken');
 
 /**
@@ -22,7 +23,6 @@ const validarJWT = async (req, res = response, next) => {
     try {
 
         // const result = jwt.verify(token, process.env.JWT_SECRET_KEY);
-        // console.log(result);
         // El resultado de la llamada verufyes como la siguiente
         // { uid: '60376234f9e4ac204cb6c4a4', iat: 1614246840, exp: 1614290040 }
 
@@ -43,7 +43,6 @@ const validarJWT = async (req, res = response, next) => {
 
         req.uid = uid;
         if (uid) {
-            console.log('validarJWT', uid);
             next();
         } else {
             return res.status(401).json({
@@ -61,4 +60,7 @@ const validarJWT = async (req, res = response, next) => {
     }
 };
 
-module.exports = { validarJWT };
+
+module.exports = {
+    validarJWT
+};

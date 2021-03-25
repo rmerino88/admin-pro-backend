@@ -1,6 +1,7 @@
 const { response } = require('express');
 const Usuario = require('../models/usuario');
 const { generarJWT } = require('../helpers/jwt');
+const { getMenu } = require('../helpers/menu');
 const { googleVerify } = require('../helpers/google-verify');
 
 const bcrypt = require('bcryptjs');
@@ -42,7 +43,8 @@ const googleSignin = async (req, res = response) => {
         return res.status(200).json({
             ok: true,
             msg: 'Todo ok.',
-            jsonWebToken
+            jsonWebToken,
+            menu: getMenu(usuarioDB.role)
         });
     } catch (error) {
         return res.status(401).json({
@@ -90,7 +92,8 @@ const login = async (req, res = response) => {
         return res.status(200).json({
             ok: true,
             msg: 'Todo ok.',
-            token
+            token,
+            menu: getMenu(usuarioDB.role)
         });
     } catch (error) {
         return res.status(500).json({
@@ -137,7 +140,8 @@ const renewToken = async (req, res = response) => {
             // newToken: token,
             token,
             // uidUsuario: uid,
-            usuario
+            usuario,
+            menu: getMenu(usuario.role)
         });
     } catch (error) {
         return res.status(500).json({

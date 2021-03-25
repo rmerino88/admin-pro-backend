@@ -43,7 +43,6 @@ const getUsuarios = async (req, res) => {
         Usuario.countDocuments()
     ]);
 
-    console.log(total);
     res.status(200).json({
         ok: true,
         resultado: usuarios,
@@ -73,7 +72,6 @@ const addUsuario = async (req, res = response) => {
         await usuario.save();
 
         // Generar el token
-        console.log(usuario);
         const token = await generarJWT(usuario.id)
             .then((token) => { return token })
             .catch((error) => {
@@ -92,7 +90,7 @@ const addUsuario = async (req, res = response) => {
     } catch (err) {
         return res.status(500).json({
             ok: false,
-            msg: err.message
+            msg: err
         });
     }
 };
@@ -135,19 +133,13 @@ const modifyUsuario = async (req, res = response) => {
             }
         } 
 
-        console.log(uid);
-        console.log(campos);
         // findByIdAndUpdate por defecto devuelve el registro antes del update.
         // No sirve para nada, es necesario new: true en las options para obtener el ya actualizado
         const usuarioActualizado = await Usuario.findByIdAndUpdate(uid, campos, { new: true });
-
-        // return res.status(200).json({
-        //     ok: true,
-        //     usuarioActualizado
-        // });
-        return res.status(400).json({
-            ok: false,
-            msg: 'Los usuarios de google no pueden cambiar su correo.'
+        
+        return res.status(200).json({
+            ok: true,
+            usuarioActualizado
         });
     } catch (err) {
         return res.status(500).json({

@@ -11,7 +11,6 @@ const getImage = async (req, res = response) => {
     const img = req.params.img;
 
     let pathImage = path.join( __dirname, `../uploads/${tipo}/${img}`);
-    // console.log('__dirname', __dirname);
     if ( !fs.existsSync(pathImage) ) {
         pathImage = path.join( __dirname, `../uploads/Image-Not-Available.jpg`);
     }

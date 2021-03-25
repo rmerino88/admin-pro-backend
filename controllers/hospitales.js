@@ -61,7 +61,6 @@ const modifyHospital = async (req, res = response) => {
         if (hospitalDB.nombre !== nombre) {
             // Buscamos en BD registros con ese nombre
             const existeNombre = await Hospital.findOne({ nombre });
-            console.log(`existeNombre ${existeNombre}`);
             if (existeNombre) {
                 return res.status(500).json({
                     ok: false,

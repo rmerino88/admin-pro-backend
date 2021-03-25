@@ -25,7 +25,6 @@ const actualizarImagen = async (tipo, uid, nombreArchivo) => {
 
             usuarioDB.img = nombreArchivo;
             // const usuarioActualizado = await Usuario.findByIdAndUpdate(uid, usuarioDB, { new: true });
-            // console.log(usuarioActualizado);
             await usuarioDB.save();
             return true;
         case 'hospitales':
