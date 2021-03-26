@@ -4,7 +4,6 @@
 */
 // Se recomienda el uso de UpperCamelcase por que se trata de una clase
 const Hospital = require('../models/hospital')
-const Usuario = require('../models/usuario')
 // Para obetener las ayudas del visual studio sobre los objetos res y req
 const { response } = require('express');
 
