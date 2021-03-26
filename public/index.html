@@ -1,41 +1,75 @@
+<!doctype html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <meta name="google-signin-client_id"
-        content="1056987659897-h67o3g721r2o8ovul342fmiudpudm8hm.apps.googleusercontent.com">
-</head>
+    <meta charset="utf-8">
+    <title>AdminPro</title>
+    <!--
+        APP_BASE_HREF en app.module.ts o en el html,
+        pero hay que indicarlo, no funciona de la misma manera.
+        <base href="/"> = {provide: APP_BASE_HREF, useValue: ''}
+    -->
+    <!--
+        The base element allows authors to specify the document base URL
+        for the purposes of resolving relative URLs,
+        and the name of the default browsing context for the purposes of
+        following hyperlinks. The element does not represent any content
+        beyond this information.
+    -->
+    <base href="/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Google Sign in -->
+    <meta name="google-signin-client_id" content="1056987659897-h67o3g721r2o8ovul342fmiudpudm8hm.apps.googleusercontent.com">
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="./assets/images/favicon.png">
+    <!-- Bootstrap Core CSS -->
+    <link href="./assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="./assets/css/style.css" rel="stylesheet">
+    
+    <!-- You can change the theme colors from here -->
+    <link href="./assets/css/colors/purple-dark.css" id="theme" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <!-- Google Platform Library -->
+    <script src="https://apis.google.com/js/platform.js?" async defer></script>
+<link rel="stylesheet" href="styles.d2bd1df760b14f975372.css"></head>
 
-<body>
-    <h1>Google Sign in</h1>
-    <br>
-    <div class="g-signin2" data-onsuccess="onSignIn"></div>
-    <a href="#" onclick="signOut();">Sign out</a>
-
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <script>
-        // Abrir sesión
-        function onSignIn(googleUser) {
-            var profile = googleUser.getBasicProfile();
-            console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-            console.log('Name: ' + profile.getName());
-            console.log('Image URL: ' + profile.getImageUrl());
-            console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-            var id_token = googleUser.getAuthResponse().id_token;
-            // Este es el token que tenemos que validar desde el backend con librerías de Google
-            console.log(id_token);
-        }
-        // Cerrar sesión
-        function signOut() {
-            var auth2 = gapi.auth2.getAuthInstance();
-            auth2.signOut().then(function () {
-                console.log('User signed out.');
-            });
-        }
-    </script>
-</body>
+<body class="fix-header card-no-border fix-sidebar">
+    <!-- ============================================================== -->
+    <!-- Preloader - style you can find in spinners.css -->
+    <!-- ============================================================== -->
+    <div class="preloader">
+        <div class="loader">
+            <div class="loader__figure"></div>
+            <p class="loader__label">Admin Pro</p>
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- Main wrapper - style you can find in pages.scss -->
+    <!-- ============================================================== -->
+    <app-root></app-root>
+    <!-- All Jquery -->
+    <!-- ============================================================== -->
+    <script src="./assets/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap tether Core JavaScript -->
+    <script src="./assets/plugins/bootstrap/js/popper.min.js"></script>
+    <script src="./assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <!-- slimscrollbar scrollbar JavaScript -->
+    <script src="./assets/js/perfect-scrollbar.jquery.min.js"></script>
+    <!--Wave Effects -->
+    <script src="./assets/js/waves.js"></script>
+    <!--Menu sidebar -->
+    <script src="./assets/js/sidebarmenu.js"></script>
+    <!--stickey kit -->
+    <script src="./assets/plugins/sticky-kit-master/dist/sticky-kit.min.js"></script>
+    <script src="./assets/plugins/sparkline/jquery.sparkline.min.js"></script>
+    <!-- Custom JavaScript -->
+    <script src="./assets/js/custom.min.js"></script>
+    <!-- ============================================================== -->
+    <!-- Style switcher -->
+    <!-- ============================================================== -->
+    <!-- <script src="./assets/plugins/styleswitcher/jQuery.style.switcher.js"></script> -->
+<script src="runtime-es2015.a73787c8afcd07c09478.js" type="module"></script><script src="runtime-es5.a73787c8afcd07c09478.js" nomodule defer></script><script src="polyfills-es5.0c4890f6fc753405bd5e.js" nomodule defer></script><script src="polyfills-es2015.b76ea234b68d39bb9cc0.js" type="module"></script><script src="main-es2015.51076daca85c538e7432.js" type="module"></script><script src="main-es5.51076daca85c538e7432.js" nomodule defer></script></body>
 
 </html>
