@@ -8,6 +8,9 @@ const cors = require('cors');
 // Importación necesaria para la subida de ficheros
 const expressFileUpload = require('express-fileupload');
 
+// Necesario para realizar la redireccion
+const path = require('path');
+
 // Para manejar variables de entorno
 // npm i dotenv
 require('dotenv').config();
@@ -48,6 +51,7 @@ app.use('/api/menu', require('./routes/menu'));
  * redireccionada al index.html de la aplicación angular.
  */
 app.get('*', (req, res) => {
+    console.log('__dirname', __dirname);
     res.sendFile( path.resolve( __dirname, 'public/index.html' ) );
 });
 
