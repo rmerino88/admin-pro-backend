@@ -16,10 +16,10 @@ require('dotenv').config();
 const app = express();
 
 // Configurar CORS
-app.use( cors() );
+app.use(cors());
 
 // Lectura y parseo del body
-app.use( express.json() );
+app.use(express.json());
 
 // Subida de ficheros
 app.use(expressFileUpload());
@@ -28,17 +28,28 @@ app.use(expressFileUpload());
 dbConnection();
 
 // Direcciones publicas
-app.use( express.static('public') );
+app.use(express.static('public'));
 
 // Rutas
-app.use( '/api/usuarios', require('./routes/usuarios') );
-app.use( '/api/hospitales', require('./routes/hospitales') );
-app.use( '/api/medicos', require('./routes/medicos') );
-app.use( '/api/login', require('./routes/auth') );
-app.use( '/api/todo', require('./routes/busquedas') );
-app.use( '/api/upload', require('./routes/uploads') );
-app.use( '/api/image', require('./routes/images') );
-app.use( '/api/menu', require('./routes/menu') );
+app.use('/api/usuarios', require('./routes/usuarios'));
+app.use('/api/hospitales', require('./routes/hospitales'));
+app.use('/api/medicos', require('./routes/medicos'));
+app.use('/api/login', require('./routes/auth'));
+app.use('/api/todo', require('./routes/busquedas'));
+app.use('/api/upload', require('./routes/uploads'));
+app.use('/api/image', require('./routes/images'));
+app.use('/api/menu', require('./routes/menu'));
+
+/**
+ * Al realizar un refresh enc ualquiera de las páginas de la aplicación,
+ * al no estar esas rutas registradas en el index, se producce un error.
+ * Para eviatar este problema debemos de indicar que cualquiere otra ruta
+ * debe ser tratada de otra manera, es decir,
+ * redireccionada al index.html de la aplicación angular.
+ */
+app.get('*', (req, res) => {
+    res.sendFile( path.resolve( __dirname, 'public/index.html' ) );
+});
 
 // Puerto
 app.listen(process.env.PORT, () => {
