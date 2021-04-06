@@ -13,7 +13,6 @@ const jwt = require('jsonwebtoken');
 const validarJWT = async (req, res = response, next) => {
     // Leer el token
     const token = req.header('x-token');
-
     if (!token) {
         return res.status(401).json({
             ok: false,
